@@ -28,9 +28,13 @@ src/index.js
 src/components/GraphView/index.js
 src/components/GraphView/GraphView.jsx
 src/components/GraphView/GraphView.test.jsx
+src/components/GraphView/GraphView.stories.jsx
 src/test/setup.js
+e2e/graphview.scaffold.spec.ts
+playwright.config.ts
 scripts/build.mjs
 vitest.config.js
+.storybook/
 .github/workflows/
 ```
 
@@ -39,6 +43,8 @@ vitest.config.js
 ```bash
 npm install
 npm run test
+npm run test:e2e
+npm run storybook
 npm run build
 npm pack
 ```
