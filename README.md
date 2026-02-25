@@ -68,6 +68,11 @@ npm install @graphrapids/graph-view@file:../GraphView/graphrapids-graph-view-0.1
 - `RELEASE.md`
 - `THIRD_PARTY_NOTICES.md`
 
+## Persistent Context
+
+- `PROJECT_CONTEXT.md` holds stable package architecture and API notes.
+- `SESSION_NOTES.md` is the running implementation handoff log between sessions.
+
 ## Acknowledgements
 
 - [React](https://react.dev/)
