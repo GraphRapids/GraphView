@@ -159,7 +159,7 @@ describe('GraphView', () => {
           profileStage: 'published',
           profileChecksum: '1234567890abcdef',
           themeId: 'midnight',
-          themeVersion: 2,
+          themeVersion: 4,
           themeStage: 'published',
           themeChecksum: 'fedcba0987654321',
           iconsetResolutionChecksum: 'abcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcd',
@@ -176,7 +176,7 @@ describe('GraphView', () => {
     expect(screen.getByTestId('profile-meta').textContent).toContain('published');
     expect(screen.getByTestId('profile-meta').textContent).toContain('1234567890ab');
     expect(screen.getByTestId('profile-meta').textContent).toContain('Theme: midnight');
-    expect(screen.getByTestId('profile-meta').textContent).toContain('v2');
+    expect(screen.getByTestId('profile-meta').textContent).toContain('v4');
     expect(screen.getByTestId('profile-meta').textContent).toContain('fedcba098765');
     expect(screen.getByTestId('profile-meta').textContent).toContain('Iconsets');
     expect(screen.getByTestId('profile-meta').textContent).toContain('default@1,team-a@3');
