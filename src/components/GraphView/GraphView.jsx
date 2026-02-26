@@ -111,6 +111,8 @@ export default function GraphView({
   themeVersion = null,
   themeChecksum = '',
   themeStage = '',
+  iconsetResolutionChecksum = '',
+  iconsetSources = [],
 }) {
   const [isManualView, setIsManualView] = useState(false);
   const [viewerSize, setViewerSize] = useState({ width: 640, height: 420 });
@@ -157,9 +159,44 @@ export default function GraphView({
     return parts.join(' · ');
   }, [themeChecksum, themeId, themeStage, themeVersion]);
 
+  const iconsetSummary = useMemo(() => {
+    const sources = Array.isArray(iconsetSources) ? iconsetSources : [];
+    const normalizedSources = sources
+      .map((item) => {
+        if (typeof item === 'string' && item.trim()) {
+          return item.trim();
+        }
+        if (!item || typeof item !== 'object') {
+          return '';
+        }
+        const id = String(item.iconsetId || '')
+          .trim()
+          .toLowerCase();
+        const version = Number.isFinite(item.iconsetVersion) ? Number(item.iconsetVersion) : 0;
+        if (!id || version <= 0) {
+          return '';
+        }
+        return `${id}@${version}`;
+      })
+      .filter(Boolean);
+
+    if (!iconsetResolutionChecksum && normalizedSources.length === 0) {
+      return '';
+    }
+
+    const parts = ['Iconsets'];
+    if (normalizedSources.length) {
+      parts.push(normalizedSources.join(','));
+    }
+    if (iconsetResolutionChecksum) {
+      parts.push(String(iconsetResolutionChecksum).slice(0, 12));
+    }
+    return parts.join(' · ');
+  }, [iconsetResolutionChecksum, iconsetSources]);
+
   const runtimeSummary = useMemo(
-    () => [profileSummary, themeSummary].filter(Boolean).join(' | '),
-    [profileSummary, themeSummary]
+    () => [profileSummary, themeSummary, iconsetSummary].filter(Boolean).join(' | '),
+    [iconsetSummary, profileSummary, themeSummary]
   );
 
   useEffect(() => {

@@ -162,6 +162,11 @@ describe('GraphView', () => {
           themeVersion: 2,
           themeStage: 'published',
           themeChecksum: 'fedcba0987654321',
+          iconsetResolutionChecksum: 'abcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcd',
+          iconsetSources: [
+            { iconsetId: 'default', iconsetVersion: 1 },
+            { iconsetId: 'team-a', iconsetVersion: 3 },
+          ],
         })}
       />
     );
@@ -173,6 +178,9 @@ describe('GraphView', () => {
     expect(screen.getByTestId('profile-meta').textContent).toContain('Theme: midnight');
     expect(screen.getByTestId('profile-meta').textContent).toContain('v2');
     expect(screen.getByTestId('profile-meta').textContent).toContain('fedcba098765');
+    expect(screen.getByTestId('profile-meta').textContent).toContain('Iconsets');
+    expect(screen.getByTestId('profile-meta').textContent).toContain('default@1,team-a@3');
+    expect(screen.getByTestId('profile-meta').textContent).toContain('abcdefabcdef');
   });
 });
 

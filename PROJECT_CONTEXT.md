@@ -29,6 +29,8 @@ Main props accepted by `GraphView`:
 - `profileVersion`
 - `profileStage`
 - `profileChecksum`
+- `iconsetResolutionChecksum`
+- `iconsetSources`
 - `themeId`
 - `themeVersion`
 - `themeStage`
