@@ -92,7 +92,11 @@ function GraphView({
   theme,
   onToggleTheme,
   title = "SVG Preview",
-  emptyMessage = "Rendered SVG will appear here."
+  emptyMessage = "Rendered SVG will appear here.",
+  profileId = "",
+  profileVersion = null,
+  profileChecksum = "",
+  profileStage = ""
 }) {
   const [isManualView, setIsManualView] = useState(false);
   const [viewerSize, setViewerSize] = useState({ width: 640, height: 420 });
@@ -103,6 +107,22 @@ function GraphView({
   const svgDoc = useMemo(() => parseSvgDocument(svgText), [svgText]);
   const themedSvgText = useMemo(() => applySvgColorScheme(svgText, theme), [svgText, theme]);
   const canDownload = useMemo(() => svgText.trim().length > 0, [svgText]);
+  const profileSummary = useMemo(() => {
+    if (!profileId) {
+      return "";
+    }
+    const parts = [`Profile: ${profileId}`];
+    if (Number.isFinite(profileVersion) && Number(profileVersion) > 0) {
+      parts.push(`v${Number(profileVersion)}`);
+    }
+    if (profileStage) {
+      parts.push(String(profileStage));
+    }
+    if (profileChecksum) {
+      parts.push(String(profileChecksum).slice(0, 12));
+    }
+    return parts.join(" \xB7 ");
+  }, [profileChecksum, profileId, profileStage, profileVersion]);
   useEffect(() => {
     const shell = previewShellRef.current;
     if (!shell) {
@@ -180,7 +200,8 @@ function GraphView({
     /* @__PURE__ */ jsxs("div", { className: "pane-header row", children: [
       /* @__PURE__ */ jsxs("div", { children: [
         /* @__PURE__ */ jsx("h2", { children: title }),
-        /* @__PURE__ */ jsx("p", { children: status })
+        /* @__PURE__ */ jsx("p", { children: status }),
+        profileSummary ? /* @__PURE__ */ jsx("p", { className: "profile-meta", "data-testid": "profile-meta", children: profileSummary }) : null
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "controls", children: [
         /* @__PURE__ */ jsx("button", { type: "button", onClick: downloadSvg, disabled: !canDownload, children: "Download SVG" }),

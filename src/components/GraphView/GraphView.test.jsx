@@ -149,6 +149,24 @@ describe('GraphView', () => {
     expect(screen.getByText('Bad schema')).toBeInTheDocument();
     expect(screen.getByText('Render failed')).toBeInTheDocument();
   });
+
+  it('renders profile metadata when provided', () => {
+    render(
+      <GraphView
+        {...defaultProps({
+          profileId: 'default',
+          profileVersion: 3,
+          profileStage: 'published',
+          profileChecksum: '1234567890abcdef',
+        })}
+      />
+    );
+
+    expect(screen.getByTestId('profile-meta').textContent).toContain('Profile: default');
+    expect(screen.getByTestId('profile-meta').textContent).toContain('v3');
+    expect(screen.getByTestId('profile-meta').textContent).toContain('published');
+    expect(screen.getByTestId('profile-meta').textContent).toContain('1234567890ab');
+  });
 });
 
 describe('GraphView helpers', () => {

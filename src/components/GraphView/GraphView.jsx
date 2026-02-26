@@ -103,6 +103,10 @@ export default function GraphView({
   onToggleTheme,
   title = 'SVG Preview',
   emptyMessage = 'Rendered SVG will appear here.',
+  profileId = '',
+  profileVersion = null,
+  profileChecksum = '',
+  profileStage = '',
 }) {
   const [isManualView, setIsManualView] = useState(false);
   const [viewerSize, setViewerSize] = useState({ width: 640, height: 420 });
@@ -115,6 +119,22 @@ export default function GraphView({
   const svgDoc = useMemo(() => parseSvgDocument(svgText), [svgText]);
   const themedSvgText = useMemo(() => applySvgColorScheme(svgText, theme), [svgText, theme]);
   const canDownload = useMemo(() => svgText.trim().length > 0, [svgText]);
+  const profileSummary = useMemo(() => {
+    if (!profileId) {
+      return '';
+    }
+    const parts = [`Profile: ${profileId}`];
+    if (Number.isFinite(profileVersion) && Number(profileVersion) > 0) {
+      parts.push(`v${Number(profileVersion)}`);
+    }
+    if (profileStage) {
+      parts.push(String(profileStage));
+    }
+    if (profileChecksum) {
+      parts.push(String(profileChecksum).slice(0, 12));
+    }
+    return parts.join(' · ');
+  }, [profileChecksum, profileId, profileStage, profileVersion]);
 
   useEffect(() => {
     const shell = previewShellRef.current;
@@ -212,6 +232,11 @@ export default function GraphView({
         <div>
           <h2>{title}</h2>
           <p>{status}</p>
+          {profileSummary ? (
+            <p className="profile-meta" data-testid="profile-meta">
+              {profileSummary}
+            </p>
+          ) : null}
         </div>
         <div className="controls">
           <button type="button" onClick={downloadSvg} disabled={!canDownload}>

@@ -16,6 +16,7 @@ Reusable React SVG preview component package for GraphRapids apps.
 ## Features
 
 - SVG preview pane with status and error display
+- Profile metadata display (`profileId`, `profileVersion`, `profileStage`, `profileChecksum`)
 - Interactive pan/zoom/fit via `react-svg-pan-zoom`
 - Theme-aware SVG color-scheme transformation
 - Secure blob URL rendering (no direct HTML injection)
