@@ -107,6 +107,10 @@ export default function GraphView({
   profileVersion = null,
   profileChecksum = '',
   profileStage = '',
+  themeId = '',
+  themeVersion = null,
+  themeChecksum = '',
+  themeStage = '',
 }) {
   const [isManualView, setIsManualView] = useState(false);
   const [viewerSize, setViewerSize] = useState({ width: 640, height: 420 });
@@ -135,6 +139,28 @@ export default function GraphView({
     }
     return parts.join(' · ');
   }, [profileChecksum, profileId, profileStage, profileVersion]);
+
+  const themeSummary = useMemo(() => {
+    if (!themeId) {
+      return '';
+    }
+    const parts = [`Theme: ${themeId}`];
+    if (Number.isFinite(themeVersion) && Number(themeVersion) > 0) {
+      parts.push(`v${Number(themeVersion)}`);
+    }
+    if (themeStage) {
+      parts.push(String(themeStage));
+    }
+    if (themeChecksum) {
+      parts.push(String(themeChecksum).slice(0, 12));
+    }
+    return parts.join(' · ');
+  }, [themeChecksum, themeId, themeStage, themeVersion]);
+
+  const runtimeSummary = useMemo(
+    () => [profileSummary, themeSummary].filter(Boolean).join(' | '),
+    [profileSummary, themeSummary]
+  );
 
   useEffect(() => {
     const shell = previewShellRef.current;
@@ -232,9 +258,9 @@ export default function GraphView({
         <div>
           <h2>{title}</h2>
           <p>{status}</p>
-          {profileSummary ? (
+          {runtimeSummary ? (
             <p className="profile-meta" data-testid="profile-meta">
-              {profileSummary}
+              {runtimeSummary}
             </p>
           ) : null}
         </div>

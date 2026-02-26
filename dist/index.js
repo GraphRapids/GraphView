@@ -96,7 +96,11 @@ function GraphView({
   profileId = "",
   profileVersion = null,
   profileChecksum = "",
-  profileStage = ""
+  profileStage = "",
+  themeId = "",
+  themeVersion = null,
+  themeChecksum = "",
+  themeStage = ""
 }) {
   const [isManualView, setIsManualView] = useState(false);
   const [viewerSize, setViewerSize] = useState({ width: 640, height: 420 });
@@ -123,6 +127,26 @@ function GraphView({
     }
     return parts.join(" \xB7 ");
   }, [profileChecksum, profileId, profileStage, profileVersion]);
+  const themeSummary = useMemo(() => {
+    if (!themeId) {
+      return "";
+    }
+    const parts = [`Theme: ${themeId}`];
+    if (Number.isFinite(themeVersion) && Number(themeVersion) > 0) {
+      parts.push(`v${Number(themeVersion)}`);
+    }
+    if (themeStage) {
+      parts.push(String(themeStage));
+    }
+    if (themeChecksum) {
+      parts.push(String(themeChecksum).slice(0, 12));
+    }
+    return parts.join(" \xB7 ");
+  }, [themeChecksum, themeId, themeStage, themeVersion]);
+  const runtimeSummary = useMemo(
+    () => [profileSummary, themeSummary].filter(Boolean).join(" | "),
+    [profileSummary, themeSummary]
+  );
   useEffect(() => {
     const shell = previewShellRef.current;
     if (!shell) {
@@ -201,7 +225,7 @@ function GraphView({
       /* @__PURE__ */ jsxs("div", { children: [
         /* @__PURE__ */ jsx("h2", { children: title }),
         /* @__PURE__ */ jsx("p", { children: status }),
-        profileSummary ? /* @__PURE__ */ jsx("p", { className: "profile-meta", "data-testid": "profile-meta", children: profileSummary }) : null
+        runtimeSummary ? /* @__PURE__ */ jsx("p", { className: "profile-meta", "data-testid": "profile-meta", children: runtimeSummary }) : null
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "controls", children: [
         /* @__PURE__ */ jsx("button", { type: "button", onClick: downloadSvg, disabled: !canDownload, children: "Download SVG" }),

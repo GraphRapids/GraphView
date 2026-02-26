@@ -29,6 +29,10 @@ Main props accepted by `GraphView`:
 - `profileVersion`
 - `profileStage`
 - `profileChecksum`
+- `themeId`
+- `themeVersion`
+- `themeStage`
+- `themeChecksum`
 
 Behavior expectations:
 - Show status/errors without breaking viewer rendering.

@@ -42,6 +42,10 @@ const meta = {
     profileVersion: 4,
     profileStage: 'published',
     profileChecksum: '9f9e2f9968c3074cd2da6e4f9584ef2bd18ee7dc8e64555758968f5ecf20f355',
+    themeId: 'default',
+    themeVersion: 5,
+    themeStage: 'published',
+    themeChecksum: '48ce2f9968c3074cd2da6e4f9584ef2bd18ee7dc8e64555758968f5ecf20f3aa',
   },
 };
 

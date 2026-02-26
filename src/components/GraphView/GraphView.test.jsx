@@ -150,7 +150,7 @@ describe('GraphView', () => {
     expect(screen.getByText('Render failed')).toBeInTheDocument();
   });
 
-  it('renders profile metadata when provided', () => {
+  it('renders profile and theme metadata when provided', () => {
     render(
       <GraphView
         {...defaultProps({
@@ -158,6 +158,10 @@ describe('GraphView', () => {
           profileVersion: 3,
           profileStage: 'published',
           profileChecksum: '1234567890abcdef',
+          themeId: 'midnight',
+          themeVersion: 2,
+          themeStage: 'published',
+          themeChecksum: 'fedcba0987654321',
         })}
       />
     );
@@ -166,6 +170,9 @@ describe('GraphView', () => {
     expect(screen.getByTestId('profile-meta').textContent).toContain('v3');
     expect(screen.getByTestId('profile-meta').textContent).toContain('published');
     expect(screen.getByTestId('profile-meta').textContent).toContain('1234567890ab');
+    expect(screen.getByTestId('profile-meta').textContent).toContain('Theme: midnight');
+    expect(screen.getByTestId('profile-meta').textContent).toContain('v2');
+    expect(screen.getByTestId('profile-meta').textContent).toContain('fedcba098765');
   });
 });
 

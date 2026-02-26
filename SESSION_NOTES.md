@@ -15,6 +15,26 @@ Use this file as a running log between work sessions.
 ## Current
 
 ### 2026-02-26
+- Summary: Extended runtime metadata display to include render theme details.
+- Changes:
+  - Added theme metadata props (`themeId`, `themeVersion`, `themeStage`, `themeChecksum`).
+  - Updated metadata line formatting to show both profile and theme selections.
+  - Updated unit tests and Storybook args for the new runtime metadata shape.
+- Files touched:
+  - `src/components/GraphView/GraphView.jsx`
+  - `src/components/GraphView/GraphView.test.jsx`
+  - `src/components/GraphView/GraphView.stories.jsx`
+  - `README.md`
+  - `PROJECT_CONTEXT.md`
+  - `SESSION_NOTES.md`
+- Tests run:
+  - `npm test -- --run` (8 passed)
+  - `npm run build`
+- Known issues: none.
+- Next steps:
+  - Keep GraphEditor metadata wiring aligned as runtime headers evolve.
+
+### 2026-02-26
 - Summary: Added profile metadata display support to align with profile-driven runtime design.
 - Changes:
   - Added optional profile props to `GraphView` (`profileId`, `profileVersion`, `profileStage`, `profileChecksum`).
