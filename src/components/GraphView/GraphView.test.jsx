@@ -162,10 +162,10 @@ describe('GraphView', () => {
           themeVersion: 4,
           themeStage: 'published',
           themeChecksum: 'fedcba0987654321',
-          iconsetResolutionChecksum: 'abcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcd',
-          iconsetSources: [
-            { iconsetId: 'default', iconsetVersion: 1 },
-            { iconsetId: 'team-a', iconsetVersion: 3 },
+          iconSetResolutionChecksum: 'abcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcd',
+          iconSetSources: [
+            { iconSetId: 'default', iconSetVersion: 1 },
+            { iconSetId: 'team-a', iconSetVersion: 3 },
           ],
         })}
       />

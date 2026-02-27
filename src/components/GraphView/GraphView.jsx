@@ -111,8 +111,8 @@ export default function GraphView({
   themeVersion = null,
   themeChecksum = '',
   themeStage = '',
-  iconsetResolutionChecksum = '',
-  iconsetSources = [],
+  iconSetResolutionChecksum = '',
+  iconSetSources = [],
 }) {
   const [isManualView, setIsManualView] = useState(false);
   const [viewerSize, setViewerSize] = useState({ width: 640, height: 420 });
@@ -160,7 +160,7 @@ export default function GraphView({
   }, [themeChecksum, themeId, themeStage, themeVersion]);
 
   const iconsetSummary = useMemo(() => {
-    const sources = Array.isArray(iconsetSources) ? iconsetSources : [];
+    const sources = Array.isArray(iconSetSources) ? iconSetSources : [];
     const normalizedSources = sources
       .map((item) => {
         if (typeof item === 'string' && item.trim()) {
@@ -169,10 +169,10 @@ export default function GraphView({
         if (!item || typeof item !== 'object') {
           return '';
         }
-        const id = String(item.iconsetId || '')
+        const id = String(item.iconSetId || '')
           .trim()
           .toLowerCase();
-        const version = Number.isFinite(item.iconsetVersion) ? Number(item.iconsetVersion) : 0;
+        const version = Number.isFinite(item.iconSetVersion) ? Number(item.iconSetVersion) : 0;
         if (!id || version <= 0) {
           return '';
         }
@@ -180,7 +180,7 @@ export default function GraphView({
       })
       .filter(Boolean);
 
-    if (!iconsetResolutionChecksum && normalizedSources.length === 0) {
+    if (!iconSetResolutionChecksum && normalizedSources.length === 0) {
       return '';
     }
 
@@ -188,11 +188,11 @@ export default function GraphView({
     if (normalizedSources.length) {
       parts.push(normalizedSources.join(','));
     }
-    if (iconsetResolutionChecksum) {
-      parts.push(String(iconsetResolutionChecksum).slice(0, 12));
+    if (iconSetResolutionChecksum) {
+      parts.push(String(iconSetResolutionChecksum).slice(0, 12));
     }
     return parts.join(' · ');
-  }, [iconsetResolutionChecksum, iconsetSources]);
+  }, [iconSetResolutionChecksum, iconSetSources]);
 
   const runtimeSummary = useMemo(
     () => [profileSummary, themeSummary, iconsetSummary].filter(Boolean).join(' | '),

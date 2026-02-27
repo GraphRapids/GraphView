@@ -17,6 +17,7 @@
   ],
   "scripts": {
     "build": "node ./scripts/build.mjs",
+    "check:dist": "node ./scripts/check-dist-parity.mjs",
     "clean": "rm -rf dist coverage",
     "test": "vitest run --coverage",
     "test:watch": "vitest",

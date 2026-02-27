@@ -37,3 +37,6 @@ jobs:
 
       - name: Run tests (coverage threshold)
         run: npm run test
+
+      - name: Verify dist is in sync with source
+        run: npm run check:dist
