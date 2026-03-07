@@ -31,12 +31,18 @@ src/components/GraphView/GraphView.jsx
 src/components/GraphView/GraphView.test.jsx
 src/components/GraphView/GraphView.stories.jsx
 src/test/setup.js
+tests/integration/health.integration.mjs
+tests/integration/vitest.config.mjs
 e2e/graphview.scaffold.spec.ts
 playwright.config.ts
 scripts/build.mjs
+scripts/serve.mjs
 vitest.config.js
+Dockerfile
+docker-compose.yml
 .storybook/
 .github/workflows/
+docs/adr/
 ```
 
 ## Development
@@ -49,6 +55,72 @@ npm run storybook
 npm run build
 npm pack
 ```
+
+## Docker
+
+GraphView is containerised as a static Storybook server with a `/health` endpoint.
+
+### Exposed Port
+
+| Service    | Port |
+|------------|------|
+| GraphView  | 8080 |
+
+### Build and Run with Docker
+
+```bash
+# Build the image
+docker build -t graphview .
+
+# Run the container
+docker run -p 8080:8080 graphview
+
+# Verify health
+curl http://localhost:8080/health
+# {"status":"ok"}
+```
+
+### Run with docker-compose
+
+```bash
+# Start the service (builds if needed)
+docker compose up --build -d
+
+# Wait for healthy status
+docker compose ps
+
+# Stop and remove
+docker compose down
+```
+
+The `GRAPHVIEW_PORT` environment variable overrides the host-side port mapping (default: `8080`).
+
+### Local Static Server (without Docker)
+
+```bash
+npm run build-storybook
+npm run serve
+# Listening on http://0.0.0.0:8080
+```
+
+## Integration Tests
+
+Integration tests run against a live GraphView instance and are kept separate from unit tests.
+
+```bash
+# 1. Start the service (Docker or local)
+docker compose up --build -d
+
+# 2. Run integration tests
+npm run test:integration
+
+# 3. Tear down
+docker compose down
+```
+
+The `GRAPHVIEW_URL` environment variable overrides the target URL (default: `http://localhost:8080`).
+
+Integration tests live in `tests/integration/` and use the `*.integration.mjs` naming convention so they are never executed by `npm test`.
 
 ## Use In GraphEditor
 
@@ -79,6 +151,12 @@ npm install @graphrapids/graph-view@file:../GraphView/graphrapids-graph-view-0.1
 
 - `PROJECT_CONTEXT.md` holds stable package architecture and API notes.
 - `SESSION_NOTES.md` is the running implementation handoff log between sessions.
+
+## Architecture Decision Records
+
+- [ADR 001: Health check endpoint contract](docs/adr/001-health-check-contract.md)
+- [ADR 002: Dockerfile and docker-compose conventions](docs/adr/002-dockerfile-conventions.md)
+- [ADR 003: Integration test conventions](docs/adr/003-integration-test-conventions.md)
 
 ## Acknowledgements
 
