@@ -32,9 +32,15 @@ src/components/GraphView/GraphView.test.jsx
 src/components/GraphView/GraphView.stories.jsx
 src/test/setup.js
 e2e/graphview.scaffold.spec.ts
+tests/integration/setup.mjs
+tests/integration/health.test.mjs
+tests/integration/storybook.test.mjs
 playwright.config.ts
 scripts/build.mjs
 vitest.config.js
+Dockerfile
+docker-compose.yml
+server.mjs
 .storybook/
 .github/workflows/
 ```
@@ -48,6 +54,72 @@ npm run test:e2e
 npm run storybook
 npm run build
 npm pack
+```
+
+## Docker
+
+GraphView can be built and served as a containerised Storybook instance for
+integration testing and visual review.
+
+### Exposed Port
+
+| Service   | Port |
+|-----------|------|
+| GraphView | 8081 |
+
+### Build the Docker Image
+
+```bash
+docker build -t graphrapids/graph-view .
+```
+
+### Run with Docker
+
+```bash
+docker run -p 8081:8081 graphrapids/graph-view
+```
+
+The service exposes a health check at `GET /health` that returns:
+
+```json
+{ "status": "ok" }
+```
+
+### Run with Docker Compose
+
+```bash
+docker compose up --build
+```
+
+This starts the GraphView service on port **8081** with a health check.
+The service is considered ready when `GET /health` returns HTTP 200.
+
+## Integration Tests
+
+Integration tests run against a **live instance** of the service and are
+separate from unit tests — they are **not** executed by `npm test`.
+
+### Prerequisites
+
+Start the service first:
+
+```bash
+docker compose up --build -d
+```
+
+### Run Integration Tests
+
+```bash
+npm run test:integration
+```
+
+The test runner waits for the `/health` endpoint to become available
+(with exponential back-off, 30 s timeout) before executing tests.
+
+Override the service URL via the `GRAPHVIEW_URL` environment variable:
+
+```bash
+GRAPHVIEW_URL=http://localhost:8081 npm run test:integration
 ```
 
 ## Use In GraphEditor
