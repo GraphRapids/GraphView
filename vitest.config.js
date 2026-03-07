@@ -1,21 +1,20 @@
-import { configDefaults, defineConfig } from 'vitest/config';
+import { defineConfig, configDefaults } from 'vitest/config';
 
 export default defineConfig({
   test: {
     environment: 'jsdom',
-    globals: true,
-    setupFiles: './src/test/setup.js',
-    exclude: [...configDefaults.exclude, 'e2e/**'],
+    setupFiles: ['./src/test/setup.js'],
+    exclude: [...configDefaults.exclude, 'tests/integration/**'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'lcov'],
-      include: ['src/components/GraphView/GraphView.jsx'],
+      include: ['src/**'],
       thresholds: {
-        lines: 60,
-        functions: 60,
+        statements: 60,
         branches: 45,
-        statements: 60
-      }
-    }
-  }
+        functions: 60,
+        lines: 60,
+      },
+    },
+  },
 });
