@@ -31,12 +31,18 @@ src/components/GraphView/GraphView.jsx
 src/components/GraphView/GraphView.test.jsx
 src/components/GraphView/GraphView.stories.jsx
 src/test/setup.js
+tests/integration/
 e2e/graphview.scaffold.spec.ts
+server.mjs
+Dockerfile
+docker-compose.yml
 playwright.config.ts
 scripts/build.mjs
 vitest.config.js
+vitest.integration.config.js
 .storybook/
 .github/workflows/
+docs/adr/
 ```
 
 ## Development
@@ -49,6 +55,52 @@ npm run storybook
 npm run build
 npm pack
 ```
+
+## Docker
+
+GraphView is containerized as a static Storybook server with a health check endpoint.
+
+**Exposed port:** `8080` (configurable via `PORT` environment variable)
+
+### Build and run the Docker image
+
+```bash
+docker build -t graphrapids/graph-view .
+docker run -p 8080:8080 graphrapids/graph-view
+```
+
+### Using docker-compose
+
+```bash
+docker compose up --build
+```
+
+This starts the GraphView service with health checking on an isolated Docker network (`graphview-net`).
+
+### Health check
+
+| Detail   | Value             |
+|----------|-------------------|
+| Endpoint | `GET /health`     |
+| Status   | `200 OK`          |
+| Body     | `{"status":"ok"}` |
+
+### Integration tests
+
+Integration tests run against a live service instance and are separate from unit tests:
+
+```bash
+# Start the service
+docker compose up --build -d
+
+# Wait for healthy, then run integration tests
+npm run test:integration
+
+# Tear down
+docker compose down
+```
+
+The service URL defaults to `http://localhost:8080` and can be overridden with the `GRAPHVIEW_URL` environment variable.
 
 ## Use In GraphEditor
 
@@ -74,6 +126,12 @@ npm install @graphrapids/graph-view@file:../GraphView/graphrapids-graph-view-0.1
 - `SECURITY.md`
 - `RELEASE.md`
 - `THIRD_PARTY_NOTICES.md`
+
+## Architecture Decision Records
+
+- [`docs/adr/001-health-check-contract.md`](docs/adr/001-health-check-contract.md) — Standard health check endpoint contract
+- [`docs/adr/002-dockerfile-conventions.md`](docs/adr/002-dockerfile-conventions.md) — Dockerfile and docker-compose conventions
+- [`docs/adr/003-integration-test-conventions.md`](docs/adr/003-integration-test-conventions.md) — Integration test scaffolding and execution conventions
 
 ## Persistent Context
 
