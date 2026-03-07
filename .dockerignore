@@ -1,0 +1,9 @@
+node_modules
+dist
+coverage
+storybook-static
+.git
+.github
+e2e
+tests
+*.tgz

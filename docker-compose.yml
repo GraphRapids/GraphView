@@ -1,0 +1,38 @@
+# ---------------------------------------------------------------------------
+# GraphView — Docker Compose
+#
+# Starts the GraphView Storybook service on port 8081 with a health check.
+# Integration tests can be run once the service is healthy.
+#
+# Usage:
+#   docker compose up --build
+#   npm run test:integration
+# ---------------------------------------------------------------------------
+
+services:
+  graphview:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      - PORT=8081
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://localhost:8081/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))",
+        ]
+      interval: 10s
+      timeout: 3s
+      start_period: 15s
+      retries: 3
+    networks:
+      - graphrapids
+
+networks:
+  graphrapids:
+    driver: bridge
