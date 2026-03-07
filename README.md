@@ -32,6 +32,10 @@ src/components/GraphView/GraphView.test.jsx
 src/components/GraphView/GraphView.stories.jsx
 src/test/setup.js
 e2e/graphview.scaffold.spec.ts
+tests/integration/healthcheck.test.mjs
+server.mjs
+Dockerfile
+docker-compose.yml
 playwright.config.ts
 scripts/build.mjs
 vitest.config.js
@@ -49,6 +53,83 @@ npm run storybook
 npm run build
 npm pack
 ```
+
+## Docker
+
+GraphView is containerised via a multi-stage Dockerfile that builds Storybook
+and serves it with a minimal Node.js static file server.
+
+**Exposed port:** `6006` (configurable via the `PORT` environment variable)
+
+### Build the image
+
+```bash
+docker build -t graphview .
+```
+
+### Run the container
+
+```bash
+docker run -p 6006:6006 graphview
+```
+
+### Using docker-compose
+
+```bash
+docker compose up --build
+```
+
+The service will be available at `http://localhost:6006`. The health check
+endpoint is at `GET /health` and returns `{"status":"ok"}` with HTTP 200.
+
+### Serving locally (without Docker)
+
+Build Storybook and start the production server:
+
+```bash
+npm run build-storybook
+npm run serve
+```
+
+## Integration Testing
+
+Integration tests live in `tests/integration/` and run against a live instance
+of the service. They are fully separated from unit tests.
+
+### Run integration tests
+
+1. Start the service (via Docker or locally):
+
+   ```bash
+   docker compose up --build -d
+   # or
+   npm run build-storybook && npm run serve &
+   ```
+
+2. Run the integration test suite:
+
+   ```bash
+   npm run test:integration
+   ```
+
+3. Optionally point tests at a different URL:
+
+   ```bash
+   GRAPHVIEW_URL=http://localhost:8080 npm run test:integration
+   ```
+
+The tests wait for the `/health` endpoint with exponential backoff (up to 30 s)
+before executing.
+
+## Health Check
+
+| Endpoint | Method | Response | Status |
+| --- | --- | --- | --- |
+| `/health` | `GET` | `{"status":"ok"}` | `200` |
+
+This is a cross-repo contract used by Graphras for pre-push integration
+validation. Do not change the path or response shape without updating the
+corresponding ADR.
 
 ## Use In GraphEditor
 

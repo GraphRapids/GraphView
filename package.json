@@ -18,9 +18,11 @@
   "scripts": {
     "build": "node ./scripts/build.mjs",
     "check:dist": "node ./scripts/check-dist-parity.mjs",
-    "clean": "rm -rf dist coverage",
+    "clean": "rm -rf dist coverage storybook-static",
     "test": "vitest run --coverage",
     "test:watch": "vitest",
+    "test:integration": "node --test tests/integration/",
+    "serve": "node server.mjs",
     "storybook": "storybook dev -p 6006 --no-open",
     "build-storybook": "storybook build",
     "test:e2e": "playwright test",
